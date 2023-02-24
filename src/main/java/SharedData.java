@@ -1,6 +1,5 @@
 import java.util.ArrayDeque;
 import java.util.Queue;
-import java.util.Random;
 
 public class SharedData {
     private final Queue<Integer> data = new ArrayDeque<>();
@@ -9,9 +8,10 @@ public class SharedData {
 
     SharedData(int size) {
         maxSize = size;
-
     }
+
     public void add(Integer number) throws InterruptedException {
+        // Используем lock, так как дальше будем обращаться к разделяемому ресурсу -- data
         synchronized (lock) {
             while (data.size() == maxSize) {
                 System.out.println("Data is full, producer is waiting...");
@@ -25,6 +25,7 @@ public class SharedData {
     }
 
     public void extract() throws InterruptedException {
+        // Используем lock, так как дальше будем обращаться к разделяемому ресурсу -- data
         synchronized (lock) {
             while (data.isEmpty()) {
                 System.out.println("Consumer is waiting for new numbers...");
